@@ -3,6 +3,7 @@ import SignIn from "./pages/AuthPages/SignIn";
 import NotFound from "./pages/OtherPage/NotFound";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 import AIChat from "./pages/AIChat";
+import HomePage from "./pages/HomePage";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
 
@@ -13,15 +14,11 @@ export default function App() {
         <AuthProvider>
           <ScrollToTop />
           <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<HomePage />} />
+            <Route path="/signin" element={<SignIn />} />
+
             {/* Protected Routes */}
-            <Route
-              path="/"
-              element={
-                <ProtectedRoute>
-                  <AIChat />
-                </ProtectedRoute>
-              }
-            />
             <Route
               path="/chat"
               element={
@@ -30,9 +27,6 @@ export default function App() {
                 </ProtectedRoute>
               }
             />
-
-            {/* Auth Routes */}
-            <Route path="/signin" element={<SignIn />} />
 
             {/* Fallback Route */}
             <Route path="*" element={<NotFound />} />
