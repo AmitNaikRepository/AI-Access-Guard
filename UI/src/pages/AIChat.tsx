@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate, Link } from 'react-router';
+import { useNavigate } from 'react-router';
 import { useAuth } from '../context/AuthContext';
 import PageMeta from '../components/common/PageMeta';
 
@@ -180,42 +180,28 @@ export default function AIChat() {
   return (
     <>
       <PageMeta
-        title="Chat | RoleQuest - AI Access Guard"
-        description="Secure AI chat with role-based access and real-time guardrails"
+        title="AI Chat | AI Access Guard"
+        description="Secure AI chat with layered security"
       />
 
       <div className="flex flex-col h-screen bg-gray-50 dark:bg-gray-900">
         {/* Header */}
         <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-xl">RQ</span>
-                </div>
-                <div>
-                  <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                    RoleQuest
-                  </h1>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
-                    Enterprise AI with role-based security
-                  </p>
-                </div>
-              </div>
-              <div className="hidden md:block border-l border-gray-300 dark:border-gray-600 h-10"></div>
-              <div className="hidden md:block">
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  {user ? (
-                    <>
-                      <span className="font-semibold text-gray-900 dark:text-white">{user.username}</span>
-                      {' · '}
-                      <span className="capitalize text-blue-600 dark:text-blue-400">{user.role}</span>
-                    </>
-                  ) : (
-                    'Loading...'
-                  )}
-                </p>
-              </div>
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                AI Access Guard Chat
+              </h1>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                {user ? (
+                  <>
+                    Logged in as <span className="font-semibold">{user.username}</span> (
+                    <span className="capitalize">{user.role}</span>)
+                  </>
+                ) : (
+                  'Loading...'
+                )}
+              </p>
             </div>
             <div className="flex items-center gap-3">
               {isConnected ? (
@@ -237,18 +223,12 @@ export default function AIChat() {
                   Reconnect
                 </button>
               )}
-              <Link
-                to="/"
-                className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-              >
-                Home
-              </Link>
               <button
                 onClick={() => {
                   logout();
                   navigate('/signin');
                 }}
-                className="px-4 py-2 text-sm text-white bg-red-500 rounded-lg hover:bg-red-600 transition-colors"
+                className="px-4 py-2 text-sm text-white bg-red-500 rounded-lg hover:bg-red-600"
               >
                 Logout
               </button>

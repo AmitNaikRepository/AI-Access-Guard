@@ -42,27 +42,17 @@ export default function SignInForm() {
           className="inline-flex items-center text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
         >
           <ChevronLeftIcon className="size-5" />
-          Back to home
+          Back to dashboard
         </Link>
       </div>
       <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
         <div>
           <div className="mb-5 sm:mb-8">
-            <div className="flex items-center space-x-3 mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-2xl">RQ</span>
-              </div>
-              <div>
-                <h1 className="font-bold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">
-                  RoleQuest
-                </h1>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  AI Access Guard
-                </p>
-              </div>
-            </div>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Sign in to access secure AI chat with role-based permissions
+            <h1 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">
+              Sign In to AI Access Guard
+            </h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Enter your username and password to sign in!
             </p>
           </div>
           <div>

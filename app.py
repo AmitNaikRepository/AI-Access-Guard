@@ -251,7 +251,7 @@ async def call_llm(prompt: str, role: str, model: str = None) -> str:
         raise HTTPException(status_code=500, detail="LLM client not initialized (GROQ_API_KEY missing)")
 
     if model is None:
-        model = os.getenv("LLM_MODEL", "llama-3.1-70b-versatile")
+        model = os.getenv("LLM_MODEL", "llama-3.1-8b-instant")
 
     try:
         # build role-specific system prompt

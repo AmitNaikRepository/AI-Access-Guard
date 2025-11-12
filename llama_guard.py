@@ -33,7 +33,7 @@ def initialize_llama_guard(api_key: str = None):
     logger.info("Llama Guard initialized successfully")
 
 
-async def llama_guard_check(prompt: str, model: str = "llama-guard-3-8b") -> Tuple[bool, str, Dict]:
+async def llama_guard_check(prompt: str, model: str = "meta-llama/llama-guard-4-12b") -> Tuple[bool, str, Dict]:
     """
     Check if the prompt is safe using Llama Guard 3.
 
