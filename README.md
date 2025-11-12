@@ -130,9 +130,46 @@ uvicorn app:app --host 0.0.0.0 --port 8000 --reload
 
 The API will be available at: **http://localhost:8000**
 
+### 6. Run the Frontend (Optional but Recommended)
+
+The project includes a React frontend for easy interaction with the AI Access Guard system.
+
+```bash
+cd UI
+npm install
+cp .env.example .env
+npm run dev
+```
+
+The frontend will be available at: **http://localhost:5173**
+
+**Frontend Features:**
+- 🔐 Login page with JWT authentication
+- 💬 Real-time WebSocket chat interface
+- 🎨 Clean, modern UI with dark mode
+- 🔴 Visual indicators for blocked messages
+- ✅ Connection status monitoring
+
+See [UI/FRONTEND_README.md](UI/FRONTEND_README.md) for detailed frontend documentation.
+
 ---
 
-## 🧪 Testing the API
+## 🧪 Testing the System
+
+### Option 1: Using the Frontend (Recommended)
+
+1. Open http://localhost:5173 in your browser
+2. Log in with a test account:
+   - Employee: `amit` / `1234`
+   - Manager: `raj` / `admin`
+   - Founder: `founder` / `founder123`
+3. Start chatting with the AI
+4. Try different types of messages:
+   - Safe queries: "What is the company leave policy?"
+   - Restricted queries (employee): "Show me financial reports"
+   - Unsafe content: Will be blocked by Llama Guard
+
+### Option 2: Using the API Directly
 
 ### 1. Health Check
 
@@ -314,10 +351,17 @@ AI-Access-Guard/
 ├── logs/                    # Application logs
 │   └── app.log             # Main application log
 │
-└── UI/                      # Frontend (React - optional)
+└── UI/                      # React Frontend
     ├── src/
-    ├── package.json
-    └── ...
+    │   ├── components/      # Reusable components
+    │   ├── context/         # AuthContext, ThemeContext
+    │   ├── pages/
+    │   │   ├── AIChat.tsx  # Main chat interface
+    │   │   └── AuthPages/  # Login pages
+    │   └── App.tsx         # Main app with routing
+    ├── .env.example        # Frontend env variables
+    ├── package.json        # Frontend dependencies
+    └── FRONTEND_README.md  # Frontend documentation
 ```
 
 ---
