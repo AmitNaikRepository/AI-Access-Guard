@@ -1,0 +1,237 @@
+# NeMo Guardrails Configuration for AI Access Guard
+# This configuration enforces role-based access control and company policies
+
+models:
+  - type: main
+    engine: groq
+    model: llama-3.1-70b-versatile
+
+# General instructions for the AI assistant
+instructions:
+  - type: general
+    content: |
+      You are an AI assistant for an enterprise company with strict access control policies.
+      You must respect role-based permissions and only provide information that the user is authorized to access.
+      Always be helpful within the boundaries of the user's role and permissions.
+      If a user asks for information they are not authorized to access, politely explain that they don't have the necessary permissions.
+
+# Role-based access control rails
+rails:
+  input:
+    flows:
+      - check user role
+      - check query authorization
+      - validate topic access
+
+  output:
+    flows:
+      - filter sensitive information
+      - add role context
+      - check data leakage
+
+  retrieval:
+    flows:
+      - check data source permissions
+
+# Define user message flows for different roles
+flows:
+  - name: check user role
+    steps:
+      - action: check_user_role
+      - if: $role == "employee"
+        then:
+          - action: load_employee_permissions
+      - if: $role == "manager"
+        then:
+          - action: load_manager_permissions
+      - if: $role == "founder"
+        then:
+          - action: load_founder_permissions
+      - else:
+        - action: deny_access
+
+  - name: check query authorization
+    steps:
+      - action: extract_query_topics
+      - action: check_topic_permissions
+      - if: not $authorized
+        then:
+          - action: block_unauthorized_query
+          - return: "I'm sorry, but you don't have permission to access that information. Please contact your administrator if you believe this is an error."
+
+  - name: validate topic access
+    steps:
+      - action: validate_against_allowed_topics
+      - action: validate_against_restricted_topics
+      - if: $is_restricted
+        then:
+          - action: log_restricted_access_attempt
+          - return: "This information is restricted for your role. If you need access, please submit a request through the proper channels."
+
+  - name: filter sensitive information
+    steps:
+      - action: scan_for_sensitive_data
+      - action: redact_if_unauthorized
+      - action: log_information_access
+
+  - name: check data source permissions
+    steps:
+      - action: verify_data_source_access
+      - if: not $has_access
+        then:
+          - action: block_data_retrieval
+          - return: "You don't have access to this data source."
+
+# Prompts for role-based context
+prompts:
+  - task: self_check_input
+    content: |
+      Your task is to check if the user message below complies with the company policy for AI assistants.
+
+      Company policy for the AI assistant:
+      - Should be helpful and respectful
+      - Should not provide information outside the user's role permissions
+      - Should not bypass security controls
+      - Should not share sensitive information with unauthorized users
+      - Should log all access attempts for auditing
+
+      User role: {{ user_role }}
+      Allowed topics: {{ allowed_topics }}
+      Restricted topics: {{ restricted_topics }}
+
+      User message: {{ user_message }}
+
+      Question: Should the user message be blocked (Yes or No)?
+      Answer:
+
+  - task: self_check_output
+    content: |
+      Your task is to check if the bot message below complies with the company policy for AI assistants.
+
+      Company policy for the AI assistant:
+      - Should not reveal sensitive information to unauthorized roles
+      - Should not contain restricted topics for the user's role
+      - Should maintain confidentiality of other employees' personal data
+      - Should not expose financial data to unauthorized users
+
+      User role: {{ user_role }}
+      Allowed topics: {{ allowed_topics }}
+      Restricted topics: {{ restricted_topics }}
+
+      Bot message: {{ bot_message }}
+
+      Question: Should the bot message be blocked (Yes or No)?
+      Answer:
+
+# Custom actions for role-based access control
+actions:
+  - name: check_user_role
+    description: Verify user role from JWT token
+    return_value: role
+
+  - name: load_employee_permissions
+    description: Load permissions for employee role
+    return_value: permissions
+
+  - name: load_manager_permissions
+    description: Load permissions for manager role
+    return_value: permissions
+
+  - name: load_founder_permissions
+    description: Load permissions for founder role
+    return_value: permissions
+
+  - name: extract_query_topics
+    description: Extract topics from user query
+    return_value: topics
+
+  - name: check_topic_permissions
+    description: Check if user has permission for queried topics
+    return_value: authorized
+
+  - name: validate_against_allowed_topics
+    description: Validate query against allowed topics list
+    return_value: is_allowed
+
+  - name: validate_against_restricted_topics
+    description: Validate query against restricted topics list
+    return_value: is_restricted
+
+  - name: scan_for_sensitive_data
+    description: Scan output for sensitive information
+    return_value: has_sensitive_data
+
+  - name: redact_if_unauthorized
+    description: Redact sensitive data if user is not authorized
+    return_value: redacted_output
+
+  - name: verify_data_source_access
+    description: Verify user has access to requested data source
+    return_value: has_access
+
+  - name: log_restricted_access_attempt
+    description: Log attempt to access restricted information
+
+  - name: log_information_access
+    description: Log successful information access
+
+  - name: block_unauthorized_query
+    description: Block and log unauthorized query
+
+  - name: block_data_retrieval
+    description: Block unauthorized data retrieval
+
+  - name: deny_access
+    description: Deny access for unknown or invalid role
+
+# Define message filters
+message_filters:
+  - name: block_jailbreak_attempts
+    description: Block jailbreak and prompt injection attempts
+    patterns:
+      - "ignore previous instructions"
+      - "ignore all instructions"
+      - "you are now"
+      - "act as"
+      - "pretend you are"
+      - "roleplay as"
+      - "forget your role"
+      - "disregard"
+      - "bypass"
+    action: block
+
+  - name: block_sensitive_data_exposure
+    description: Prevent exposure of sensitive employee data
+    patterns:
+      - "salary of"
+      - "compensation for"
+      - "SSN"
+      - "social security"
+      - "bank account"
+      - "credit card"
+    action: filter_by_role
+
+  - name: block_unauthorized_code_execution
+    description: Block attempts to execute code
+    patterns:
+      - "execute this code"
+      - "run this script"
+      - "eval("
+      - "exec("
+      - "system("
+      - "os.system"
+    action: block
+
+# Logging configuration
+logging:
+  level: INFO
+  handlers:
+    - type: file
+      filename: guardrails.log
+    - type: console
+  include:
+    - user_queries
+    - blocked_queries
+    - role_checks
+    - permission_validations
+    - sensitive_data_access
