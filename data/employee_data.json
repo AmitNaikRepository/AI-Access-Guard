@@ -1,0 +1,34 @@
+{
+  "role": "employee",
+  "description": "Basic employee with limited access to company information",
+  "allowed_topics": [
+    "company policies",
+    "leave policies",
+    "general HR information",
+    "team contact information",
+    "basic product information",
+    "office facilities",
+    "training resources"
+  ],
+  "restricted_topics": [
+    "financial data",
+    "salary information of others",
+    "strategic plans",
+    "confidential customer data",
+    "executive decisions",
+    "merger and acquisition information",
+    "proprietary algorithms"
+  ],
+  "data_sources": {
+    "hr_policies": "Access to general HR policies and procedures",
+    "team_directory": "Access to team member contact information",
+    "training_materials": "Access to role-specific training content",
+    "product_docs": "Access to basic product documentation"
+  },
+  "sample_queries": [
+    "What is the company's leave policy?",
+    "How do I submit a reimbursement request?",
+    "What are the office hours?",
+    "Where can I find training materials for my role?"
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "role": "manager",
+  "description": "Manager with access to team performance and operational data",
+  "allowed_topics": [
+    "company policies",
+    "leave policies",
+    "HR information",
+    "team contact information",
+    "product information",
+    "team performance metrics",
+    "budget information for department",
+    "hiring and recruitment data",
+    "project timelines",
+    "customer feedback",
+    "operational reports"
+  ],
+  "restricted_topics": [
+    "company-wide financial data",
+    "executive compensation",
+    "merger and acquisition plans",
+    "board meeting minutes",
+    "proprietary algorithms",
+    "other department's sensitive data"
+  ],
+  "data_sources": {
+    "hr_policies": "Full access to HR policies and procedures",
+    "team_directory": "Access to all employee contact information",
+    "training_materials": "Access to all training content",
+    "product_docs": "Full access to product documentation",
+    "performance_data": "Access to team performance metrics",
+    "budget_reports": "Access to department budget information",
+    "project_management": "Access to project timelines and status"
+  },
+  "sample_queries": [
+    "What is my team's performance this quarter?",
+    "Show me the budget allocation for my department",
+    "What are the current hiring priorities?",
+    "How many projects are delayed in my team?",
+    "What is the customer satisfaction score for our product?"
+  ]
+}

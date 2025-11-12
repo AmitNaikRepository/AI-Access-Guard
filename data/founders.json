@@ -1,0 +1,43 @@
+{
+  "role": "founder",
+  "description": "Founder with full access to all company information and strategic data",
+  "allowed_topics": [
+    "all company policies",
+    "all HR information",
+    "all employee data",
+    "complete financial data",
+    "revenue and profit reports",
+    "strategic plans",
+    "merger and acquisition information",
+    "board meeting minutes",
+    "executive compensation",
+    "proprietary algorithms",
+    "customer data",
+    "all operational data",
+    "competitive intelligence",
+    "legal matters",
+    "investment and funding information"
+  ],
+  "restricted_topics": [],
+  "data_sources": {
+    "hr_policies": "Full access to all HR policies and procedures",
+    "employee_directory": "Access to all employee information",
+    "training_materials": "Access to all training content",
+    "product_docs": "Full access to all product documentation",
+    "financial_reports": "Access to all financial data and reports",
+    "strategic_plans": "Access to company strategy and roadmap",
+    "board_materials": "Access to board meeting materials",
+    "legal_documents": "Access to legal contracts and agreements",
+    "customer_database": "Access to full customer information",
+    "analytics": "Access to all business analytics and metrics"
+  },
+  "sample_queries": [
+    "What is our current burn rate?",
+    "Show me the revenue projections for Q4",
+    "What are the details of the pending acquisition?",
+    "How many customers churned last month?",
+    "What is the total compensation for executives?",
+    "Show me the cap table",
+    "What are the key risks mentioned in the last board meeting?"
+  ]
+}
