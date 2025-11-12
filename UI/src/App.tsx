@@ -1,33 +1,43 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router";
 import SignIn from "./pages/AuthPages/SignIn";
-import SignUp from "./pages/AuthPages/SignUp";
 import NotFound from "./pages/OtherPage/NotFound";
-import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
-import Home from "./pages/Dashboard/Home";
-import Chat from "./pages/Chat";
-import Metrics from "./pages/Metrics";
+import AIChat from "./pages/AIChat";
+import ProtectedRoute from "./components/common/ProtectedRoute";
+import { AuthProvider } from "./context/AuthContext";
 
 export default function App() {
   return (
     <>
       <Router>
-        <ScrollToTop />
-        <Routes>
-          {/* Dashboard Layout */}
-          <Route element={<AppLayout />}>
-            <Route index path="/" element={<Home />} />
-            <Route path="/chat" element={<Chat />} />
-            <Route path="/metrics" element={<Metrics />} />
-          </Route>
+        <AuthProvider>
+          <ScrollToTop />
+          <Routes>
+            {/* Protected Routes */}
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <AIChat />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/chat"
+              element={
+                <ProtectedRoute>
+                  <AIChat />
+                </ProtectedRoute>
+              }
+            />
 
-          {/* Auth Layout */}
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
+            {/* Auth Routes */}
+            <Route path="/signin" element={<SignIn />} />
 
-          {/* Fallback Route */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+            {/* Fallback Route */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AuthProvider>
       </Router>
     </>
   );
