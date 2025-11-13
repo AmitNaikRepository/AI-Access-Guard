@@ -9,16 +9,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
-from typing import Optional, Dict, List
+from typing import Optional
 from pydantic import BaseModel
 import json
 import os
 import logging
 from dotenv import load_dotenv
-from groq import Groq
+import requests
 import asyncio
 
-# Import our security modules
+# Import our security modules (assumed present)
 from llama_guard import llama_guard_check, initialize_llama_guard
 from nemoguardrails import RailsConfig, LLMRails
 from pii_firewall import detect_and_mask_pii, format_detection_message
@@ -66,19 +66,12 @@ ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30")
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
-# Groq Client for LLM
-groq_api_key = os.getenv("GROQ_API_KEY")
-if not groq_api_key:
-    logger.warning("GROQ_API_KEY not set. Some features will not work.")
-    groq_client = None
+# GROQ (use HTTP API via requests)
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+if not GROQ_API_KEY:
+    logger.warning("GROQ_API_KEY not set. LLM features will be disabled.")
 else:
-    groq_client = Groq(api_key=groq_api_key)
-    # Initialize Llama Guard
-    try:
-        initialize_llama_guard(groq_api_key)
-        logger.info("Llama Guard initialized successfully")
-    except Exception as e:
-        logger.error(f"Failed to initialize Llama Guard: {e}")
+    logger.info("GROQ_API_KEY found in env.")
 
 # NeMo Guardrails Configuration
 try:
@@ -252,49 +245,48 @@ def log_query(username: str, role: str, query: str, status: str,
 
 async def call_llm(prompt: str, role: str, model: str = None) -> str:
     """
-    Call the LLM with the user's prompt.
-
-    Args:
-        prompt: User's query
-        role: User's role for context
-        model: LLM model to use (default from env)
+    Call the LLM with the user's prompt via Groq HTTP API.
 
     Returns:
-        LLM response
+        LLM response text
     """
-    if not groq_client:
-        raise HTTPException(status_code=500, detail="LLM client not initialized")
+    if not GROQ_API_KEY:
+        raise HTTPException(status_code=500, detail="LLM client not initialized (GROQ_API_KEY missing)")
 
     if model is None:
         model = os.getenv("LLM_MODEL", "llama-3.1-70b-versatile")
 
     try:
-        # Get role-specific context
+        # build role-specific system prompt
         role_context = role_data.get(role, {})
         allowed_topics = role_context.get("allowed_topics", [])
+        system_prompt = f"You are an enterprise AI assistant. The user role: {role}. Allowed topics: {', '.join(allowed_topics)}."
 
-        # Create system prompt based on role
-        system_prompt = f"""You are an AI assistant for an enterprise company.
-The user has the role: {role}.
-They have access to information about: {', '.join(allowed_topics)}.
-Provide helpful responses within their authorized scope.
-If they ask about restricted information, politely explain they don't have access."""
-
-        response = groq_client.chat.completions.create(
-            model=model,
-            messages=[
+        url = "https://api.groq.com/openai/v1/chat/completions"
+        headers = {"Authorization": f"Bearer {GROQ_API_KEY}"}
+        payload = {
+            "model": model,
+            "messages": [
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": prompt}
             ],
-            temperature=0.7,
-            max_tokens=500
-        )
-
-        return response.choices[0].message.content
-
+            "temperature": 0.7,
+            "max_tokens": 500
+        }
+        r = requests.post(url, headers=headers, json=payload, timeout=30)
+        r.raise_for_status()
+        data = r.json()
+        # safe extraction: follow OpenAI-like response shape
+        choice = data.get("choices", [{}])[0]
+        # support both `message.content` and direct `text` shapes
+        message = choice.get("message", {}).get("content") or choice.get("text") or ""
+        return message
+    except requests.RequestException as e:
+        logger.error(f"Error calling Groq API: {e} - {getattr(e, 'response', None)}")
+        raise HTTPException(status_code=500, detail="LLM request failed")
     except Exception as e:
-        logger.error(f"Error calling LLM: {e}")
-        raise HTTPException(status_code=500, detail=f"LLM error: {str(e)}")
+        logger.error(f"Unexpected LLM error: {e}")
+        raise HTTPException(status_code=500, detail="LLM error")
 
 # API Routes
 
@@ -485,7 +477,18 @@ async def websocket_chat(websocket: WebSocket):
 
             # Layer 1: Llama Guard Check
             try:
-                is_safe, category, guard_details = await llama_guard_check(user_message)
+                # expecting (is_safe, category, guard_details) from llama_guard_check
+                check = await llama_guard_check(user_message)
+                # allow both tuple or dict shaped returns
+                if isinstance(check, dict):
+                    is_safe = check.get("is_safe", True)
+                    category = check.get("category")
+                elif isinstance(check, (list, tuple)) and len(check) >= 1:
+                    is_safe = bool(check[0])
+                    category = check[1] if len(check) > 1 else None
+                else:
+                    is_safe = True
+                    category = None
 
                 if not is_safe:
                     logger.warning(f"Message blocked by Llama Guard - Category: {category}")
@@ -576,7 +579,7 @@ async def health_check():
     """Health check endpoint."""
     return {
         "status": "healthy",
-        "llama_guard": groq_client is not None,
+        "llama_guard": bool(GROQ_API_KEY),
         "guardrails": rails is not None,
         "timestamp": datetime.utcnow().isoformat()
     }
