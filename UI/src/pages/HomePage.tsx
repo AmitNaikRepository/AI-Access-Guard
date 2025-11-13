@@ -94,7 +94,7 @@ export default function HomePage() {
               <div className="inline-flex items-center px-4 py-2 bg-blue-100 dark:bg-blue-900/30 rounded-full mb-8">
                 <span className="w-2 h-2 bg-blue-500 rounded-full mr-2 animate-pulse"></span>
                 <span className="text-sm font-medium text-blue-800 dark:text-blue-300">
-                  Powered by Llama Guard 3 & NeMo Guardrails
+                  4-Layer Security System • Presidio PII • Llama Guard 3 • NeMo Guardrails
                 </span>
               </div>
 
@@ -131,17 +131,25 @@ export default function HomePage() {
               </div>
 
               {/* Stats */}
-              <div className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-3xl mx-auto">
+              <div className="mt-16 grid grid-cols-1 sm:grid-cols-4 gap-6 max-w-4xl mx-auto">
                 <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg">
-                  <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">
-                    3
+                  <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">
+                    4
                   </div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">
                     Security Layers
                   </div>
                 </div>
                 <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg">
-                  <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">
+                  <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">
+                    12+
+                  </div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                    PII Types Detected
+                  </div>
+                </div>
+                <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg">
+                  <div className="text-3xl font-bold text-pink-600 dark:text-pink-400 mb-2">
                     14+
                   </div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -149,12 +157,160 @@ export default function HomePage() {
                   </div>
                 </div>
                 <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg">
-                  <div className="text-3xl font-bold text-pink-600 dark:text-pink-400 mb-2">
+                  <div className="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">
                     100%
                   </div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">
                     Open Source
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Why RoleQuest Section */}
+        <section className="py-20 bg-gray-50 dark:bg-gray-900">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                Why RoleQuest?
+              </h2>
+              <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+                Organizations face critical challenges when deploying AI systems in production environments
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
+              {/* The Problem */}
+              <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border-2 border-red-200 dark:border-red-900/50">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center">
+                    <span className="text-2xl">⚠️</span>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white">The Problem</h3>
+                </div>
+                <ul className="space-y-4">
+                  <li className="flex items-start gap-3">
+                    <span className="text-red-500 text-xl mt-1">❌</span>
+                    <div>
+                      <p className="font-semibold text-gray-900 dark:text-white">Unprotected Sensitive Data</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        PII, SSN, credit cards, and personal info exposed to AI models
+                      </p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-red-500 text-xl mt-1">❌</span>
+                    <div>
+                      <p className="font-semibold text-gray-900 dark:text-white">Unauthorized Data Access</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        Employees accessing confidential information beyond their role
+                      </p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-red-500 text-xl mt-1">❌</span>
+                    <div>
+                      <p className="font-semibold text-gray-900 dark:text-white">Harmful Content Risk</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        No filtering for violence, hate speech, or jailbreak attempts
+                      </p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-red-500 text-xl mt-1">❌</span>
+                    <div>
+                      <p className="font-semibold text-gray-900 dark:text-white">Compliance Violations</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        No audit trail or policy enforcement for regulatory requirements
+                      </p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              {/* The Solution */}
+              <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-8 shadow-lg border-2 border-blue-200 dark:border-blue-900/50">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                    <span className="text-2xl">✨</span>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Our Solution</h3>
+                </div>
+                <ul className="space-y-4">
+                  <li className="flex items-start gap-3">
+                    <span className="text-green-500 text-xl mt-1">✅</span>
+                    <div>
+                      <p className="font-semibold text-gray-900 dark:text-white">Automatic PII Protection</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        Real-time detection and masking of 12+ types of sensitive information
+                      </p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-green-500 text-xl mt-1">✅</span>
+                    <div>
+                      <p className="font-semibold text-gray-900 dark:text-white">Role-Based Access Control</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        Employee, Manager, Founder roles with granular data permissions
+                      </p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-green-500 text-xl mt-1">✅</span>
+                    <div>
+                      <p className="font-semibold text-gray-900 dark:text-white">AI Safety Filtering</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        Llama Guard 3 blocks harmful content across 14+ categories
+                      </p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-green-500 text-xl mt-1">✅</span>
+                    <div>
+                      <p className="font-semibold text-gray-900 dark:text-white">Complete Audit Trail</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        Every query logged with security decisions for compliance
+                      </p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            {/* What You Get */}
+            <div className="bg-white dark:bg-gray-800 rounded-2xl p-10 shadow-xl">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+                What You Get with RoleQuest
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-3xl">🛡️</span>
+                  </div>
+                  <h4 className="font-bold text-gray-900 dark:text-white mb-2">Enterprise Security</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    4-layer protection system ensuring every interaction is safe and compliant
+                  </p>
+                </div>
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-3xl">⚡</span>
+                  </div>
+                  <h4 className="font-bold text-gray-900 dark:text-white mb-2">Blazing Fast</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Sub-second latency with Groq API and real-time WebSocket communication
+                  </p>
+                </div>
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-3xl">📊</span>
+                  </div>
+                  <h4 className="font-bold text-gray-900 dark:text-white mb-2">Full Visibility</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Real-time metrics, audit logs, and visual security indicators
+                  </p>
                 </div>
               </div>
             </div>
@@ -174,42 +330,8 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {/* Feature 1 */}
-              <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-900 dark:to-gray-700 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
-                <div className="w-14 h-14 bg-blue-600 rounded-xl flex items-center justify-center mb-6">
-                  <svg
-                    className="w-8 h-8 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                    />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
-                  Role-Based Control
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                  Each user gets access only to what they're authorized for. Employees, Managers,
-                  and Founders see different data based on their role.
-                </p>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  <span className="px-3 py-1 bg-blue-200 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300 text-xs rounded-full">
-                    JWT Auth
-                  </span>
-                  <span className="px-3 py-1 bg-blue-200 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300 text-xs rounded-full">
-                    3 Role Levels
-                  </span>
-                </div>
-              </div>
-
-              {/* Feature 2 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {/* Feature 1: PII Firewall */}
               <div className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-gray-900 dark:to-gray-700 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
                 <div className="w-14 h-14 bg-purple-600 rounded-xl flex items-center justify-center mb-6">
                   <svg
@@ -227,23 +349,22 @@ export default function HomePage() {
                   </svg>
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
-                  Llama Guard Integration
+                  PII Firewall (Layer 0)
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400">
-                  Real-time AI safety filtering powered by Meta's Llama Guard 3. Detects violence,
-                  hate speech, jailbreaks, and 11+ other harmful categories.
+                  Automatic detection and masking of sensitive data using Microsoft Presidio. Protects emails, SSN, credit cards, and 12+ PII types.
                 </p>
                 <div className="mt-4 flex flex-wrap gap-2">
                   <span className="px-3 py-1 bg-purple-200 dark:bg-purple-900/50 text-purple-800 dark:text-purple-300 text-xs rounded-full">
-                    14+ Categories
+                    12+ PII Types
                   </span>
                   <span className="px-3 py-1 bg-purple-200 dark:bg-purple-900/50 text-purple-800 dark:text-purple-300 text-xs rounded-full">
-                    Real-time
+                    Presidio
                   </span>
                 </div>
               </div>
 
-              {/* Feature 3 */}
+              {/* Feature 2: Llama Guard */}
               <div className="bg-gradient-to-br from-pink-50 to-pink-100 dark:from-gray-900 dark:to-gray-700 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
                 <div className="w-14 h-14 bg-pink-600 rounded-xl flex items-center justify-center mb-6">
                   <svg
@@ -256,23 +377,88 @@ export default function HomePage() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
                     />
                   </svg>
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
-                  Live Chat System
+                  Llama Guard (Layer 1)
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400">
-                  Secure, blazingly fast WebSocket communication powered by Groq API. Real-time
-                  responses with sub-second latency.
+                  Real-time AI safety filtering powered by Meta's Llama Guard 3. Detects violence, hate speech, jailbreaks, and 14+ harmful categories.
                 </p>
                 <div className="mt-4 flex flex-wrap gap-2">
                   <span className="px-3 py-1 bg-pink-200 dark:bg-pink-900/50 text-pink-800 dark:text-pink-300 text-xs rounded-full">
-                    WebSocket
+                    14+ Categories
                   </span>
                   <span className="px-3 py-1 bg-pink-200 dark:bg-pink-900/50 text-pink-800 dark:text-pink-300 text-xs rounded-full">
-                    Groq AI
+                    Groq API
+                  </span>
+                </div>
+              </div>
+
+              {/* Feature 3: NeMo Guardrails */}
+              <div className="bg-gradient-to-br from-green-50 to-green-100 dark:from-gray-900 dark:to-gray-700 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
+                <div className="w-14 h-14 bg-green-600 rounded-xl flex items-center justify-center mb-6">
+                  <svg
+                    className="w-8 h-8 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                  NeMo Guardrails (Layer 2)
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400">
+                  Enterprise policy enforcement with NVIDIA NeMo Guardrails. Custom rules, topic restrictions, and compliance controls.
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <span className="px-3 py-1 bg-green-200 dark:bg-green-900/50 text-green-800 dark:text-green-300 text-xs rounded-full">
+                    Policy Engine
+                  </span>
+                  <span className="px-3 py-1 bg-green-200 dark:bg-green-900/50 text-green-800 dark:text-green-300 text-xs rounded-full">
+                    NVIDIA NeMo
+                  </span>
+                </div>
+              </div>
+
+              {/* Feature 4: Role-Based Access */}
+              <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-900 dark:to-gray-700 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
+                <div className="w-14 h-14 bg-blue-600 rounded-xl flex items-center justify-center mb-6">
+                  <svg
+                    className="w-8 h-8 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                    />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                  Role-Based Access (Layer 3)
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400">
+                  Granular permissions with JWT authentication. Employee, Manager, and Founder roles with different data access levels.
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <span className="px-3 py-1 bg-blue-200 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300 text-xs rounded-full">
+                    3 Role Levels
+                  </span>
+                  <span className="px-3 py-1 bg-blue-200 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300 text-xs rounded-full">
+                    JWT Auth
                   </span>
                 </div>
               </div>
@@ -401,56 +587,106 @@ export default function HomePage() {
                 How It Works
               </h2>
               <p className="text-lg text-gray-600 dark:text-gray-400">
-                Three layers of security protect every interaction
+                Four layers of security protect every interaction
               </p>
             </div>
 
-            <div className="max-w-3xl mx-auto">
-              {/* Step 1 */}
+            <div className="max-w-4xl mx-auto">
+              {/* Layer 0: PII Firewall */}
               <div className="flex items-start mb-12">
-                <div className="flex-shrink-0 w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-lg">
-                  1
+                <div className="flex-shrink-0 w-14 h-14 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-lg">
+                  <span className="text-sm">L0</span>
                 </div>
                 <div className="ml-6">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                    JWT Authentication
-                  </h3>
+                  <div className="flex items-center gap-3 mb-2">
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                      Layer 0: PII Firewall
+                    </h3>
+                    <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 text-xs font-semibold rounded-full">
+                      Presidio
+                    </span>
+                  </div>
                   <p className="text-gray-600 dark:text-gray-400">
-                    User identity verified with secure JWT tokens. Role-based permissions loaded
-                    for personalized access control.
+                    First line of defense: Microsoft Presidio automatically detects and masks sensitive information like emails, phone numbers, SSN, credit cards, and 12+ other PII types before processing. Your sensitive data never reaches the AI model.
                   </p>
                 </div>
               </div>
 
-              {/* Step 2 */}
+              {/* Layer 1: Llama Guard */}
               <div className="flex items-start mb-12">
-                <div className="flex-shrink-0 w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold text-lg">
-                  2
+                <div className="flex-shrink-0 w-14 h-14 bg-pink-600 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-lg">
+                  <span className="text-sm">L1</span>
                 </div>
                 <div className="ml-6">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                    Content Safety Check
-                  </h3>
+                  <div className="flex items-center gap-3 mb-2">
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                      Layer 1: Content Safety Check
+                    </h3>
+                    <span className="px-3 py-1 bg-pink-100 dark:bg-pink-900/30 text-pink-700 dark:text-pink-300 text-xs font-semibold rounded-full">
+                      Llama Guard 3
+                    </span>
+                  </div>
                   <p className="text-gray-600 dark:text-gray-400">
-                    Llama Guard 3 scans every message for harmful content including violence, hate
-                    speech, and jailbreak attempts. Unsafe content is blocked immediately.
+                    Meta's Llama Guard 3 powered by Groq scans every message for harmful content across 14+ categories including violence, hate speech, sexual content, child safety, jailbreak attempts, and more. Unsafe content is blocked immediately with detailed reasoning.
                   </p>
                 </div>
               </div>
 
-              {/* Step 3 */}
+              {/* Layer 2: NeMo Guardrails */}
+              <div className="flex items-start mb-12">
+                <div className="flex-shrink-0 w-14 h-14 bg-green-600 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-lg">
+                  <span className="text-sm">L2</span>
+                </div>
+                <div className="ml-6">
+                  <div className="flex items-center gap-3 mb-2">
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                      Layer 2: Policy Enforcement
+                    </h3>
+                    <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-xs font-semibold rounded-full">
+                      NeMo Guardrails
+                    </span>
+                  </div>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    NVIDIA NeMo Guardrails enforces custom company policies, topic restrictions, and compliance rules. Defines conversation flows, validates input/output, and ensures all interactions align with organizational guidelines.
+                  </p>
+                </div>
+              </div>
+
+              {/* Layer 3: Role-Based Access */}
               <div className="flex items-start">
-                <div className="flex-shrink-0 w-12 h-12 bg-pink-600 text-white rounded-full flex items-center justify-center font-bold text-lg">
-                  3
+                <div className="flex-shrink-0 w-14 h-14 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-lg">
+                  <span className="text-sm">L3</span>
                 </div>
                 <div className="ml-6">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                    Policy Enforcement & AI Response
-                  </h3>
+                  <div className="flex items-center gap-3 mb-2">
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                      Layer 3: Role-Based Access & AI Response
+                    </h3>
+                    <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs font-semibold rounded-full">
+                      JWT Auth
+                    </span>
+                  </div>
                   <p className="text-gray-600 dark:text-gray-400">
-                    NeMo Guardrails enforces company policies and role restrictions. Approved
-                    queries reach the AI with proper context for accurate, safe responses.
+                    Secure JWT authentication verifies user identity and loads role-specific permissions (Employee, Manager, Founder). The AI receives appropriate context based on user role, ensuring responses respect data access boundaries and organizational hierarchy.
                   </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Visual Flow Diagram */}
+            <div className="mt-16 max-w-2xl mx-auto">
+              <div className="bg-gradient-to-r from-purple-100 via-pink-100 via-green-100 to-blue-100 dark:from-gray-700 dark:via-gray-600 dark:to-gray-700 rounded-2xl p-8 text-center">
+                <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">
+                  Security Flow
+                </p>
+                <div className="flex items-center justify-center gap-3 text-xs font-medium flex-wrap">
+                  <span className="px-4 py-2 bg-purple-600 text-white rounded-lg">PII Firewall</span>
+                  <span className="text-gray-400">→</span>
+                  <span className="px-4 py-2 bg-pink-600 text-white rounded-lg">Llama Guard</span>
+                  <span className="text-gray-400">→</span>
+                  <span className="px-4 py-2 bg-green-600 text-white rounded-lg">NeMo Guardrails</span>
+                  <span className="text-gray-400">→</span>
+                  <span className="px-4 py-2 bg-blue-600 text-white rounded-lg">Role-Based AI</span>
                 </div>
               </div>
             </div>
