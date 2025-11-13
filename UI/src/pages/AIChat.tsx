@@ -2,14 +2,27 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router';
 import { useAuth } from '../context/AuthContext';
 import PageMeta from '../components/common/PageMeta';
+import SecuritySidebar from '../components/SecuritySidebar';
+
+interface PIIDetection {
+  entity_type: string;
+  start: number;
+  end: number;
+  score: number;
+  original_value: string;
+  masked_value: string;
+}
 
 interface Message {
-  type: 'user' | 'assistant' | 'blocked' | 'connection' | 'error';
+  type: 'user' | 'assistant' | 'blocked' | 'connection' | 'error' | 'pii_detected';
   message: string;
   timestamp?: string;
   category?: string;
   layer?: string;
   reason?: string;
+  detections?: PIIDetection[];
+  summary?: string;
+  piiCount?: number;
 }
 
 const WS_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:8000';
@@ -20,6 +33,9 @@ export default function AIChat() {
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [connectionError, setConnectionError] = useState('');
+  const [piiDetections, setPiiDetections] = useState(0);
+  const [piiItemsMasked, setPiiItemsMasked] = useState(0);
+  const [sidebarVisible, setSidebarVisible] = useState(true);
   const wsRef = useRef<WebSocket | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -59,6 +75,15 @@ export default function AIChat() {
       ws.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data);
+
+          // Track PII detections
+          if (data.type === 'pii_detected' && data.detections) {
+            setPiiDetections((prev) => prev + 1);
+            setPiiItemsMasked((prev) => prev + data.detections.length);
+            // Add piiCount to the message for display
+            data.piiCount = data.detections.length;
+          }
+
           setMessages((prev) => [...prev, data]);
         } catch (error) {
           console.error('Failed to parse message:', error);
@@ -133,6 +158,13 @@ export default function AIChat() {
     setInputMessage('');
   };
 
+  // Insert demo PII example
+  const insertDemoExample = () => {
+    const demoText =
+      'My email is john.doe@company.com and my phone is 555-123-4567. My SSN is 123-45-6789. Please help me with my account.';
+    setInputMessage(demoText);
+  };
+
   // Handle Enter key
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -168,6 +200,8 @@ export default function AIChat() {
         return 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 mr-auto';
       case 'blocked':
         return 'bg-red-500 text-white mr-auto border-2 border-red-700';
+      case 'pii_detected':
+        return 'bg-purple-500 text-white mx-auto text-center border-2 border-purple-700';
       case 'connection':
         return 'bg-green-500 text-white mx-auto text-center';
       case 'error':
@@ -218,6 +252,14 @@ export default function AIChat() {
               </div>
             </div>
             <div className="flex items-center gap-3">
+              {/* Sidebar Toggle */}
+              <button
+                onClick={() => setSidebarVisible(!sidebarVisible)}
+                className="md:hidden px-3 py-2 text-sm text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"
+              >
+                {sidebarVisible ? '◀' : '☰'}
+              </button>
+
               {isConnected ? (
                 <span className="flex items-center gap-2 text-sm text-green-600 dark:text-green-400">
                   <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
@@ -263,20 +305,40 @@ export default function AIChat() {
           </div>
         )}
 
-        {/* Chat Messages */}
-        <div className="flex-1 overflow-y-auto px-6 py-4">
-          <div className="max-w-4xl mx-auto space-y-4">
+        {/* Main Content: Sidebar + Chat */}
+        <div className="flex-1 flex overflow-hidden">
+          {/* Security Sidebar */}
+          {sidebarVisible && (
+            <div className="w-full md:w-1/4 lg:w-1/5 flex-shrink-0">
+              <SecuritySidebar
+                isConnected={isConnected}
+                piiDetections={piiDetections}
+                piiItemsMasked={piiItemsMasked}
+              />
+            </div>
+          )}
+
+          {/* Chat Messages */}
+          <div className="flex-1 overflow-y-auto px-6 py-4">
+            <div className="max-w-4xl mx-auto space-y-4">
             {messages.length === 0 && (
               <div className="text-center py-12">
                 <p className="text-gray-500 dark:text-gray-400 mb-4">
                   No messages yet. Start a conversation!
                 </p>
-                <div className="text-sm text-gray-400 dark:text-gray-500">
-                  <p className="mb-2">Your messages pass through 3 security layers:</p>
+                <div className="text-sm text-gray-400 dark:text-gray-500 mb-4">
+                  <p className="mb-2">Your messages pass through 4 security layers:</p>
+                  <p>0. PII Firewall - Detects and masks sensitive data</p>
                   <p>1. Llama Guard 3 - Content safety</p>
                   <p>2. NeMo Guardrails - Policy enforcement</p>
                   <p>3. AI with role-based context</p>
                 </div>
+                <button
+                  onClick={insertDemoExample}
+                  className="mt-4 px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium"
+                >
+                  🧪 Try PII Detection Example
+                </button>
               </div>
             )}
 
@@ -298,7 +360,24 @@ export default function AIChat() {
                       Message Blocked
                     </div>
                   )}
+                  {msg.type === 'pii_detected' && (
+                    <div className="mb-2 font-semibold flex items-center gap-2">
+                      <span className="text-2xl">🛡️</span>
+                      PII Protection Active
+                    </div>
+                  )}
                   <p className="whitespace-pre-wrap break-words">{msg.message}</p>
+                  {msg.type === 'pii_detected' && msg.detections && msg.detections.length > 0 && (
+                    <div className="mt-3 text-xs space-y-1">
+                      <p className="font-semibold">Protected Information:</p>
+                      {msg.detections.map((detection, idx) => (
+                        <p key={idx} className="opacity-90">
+                          • {detection.entity_type.replace(/_/g, ' ')}:{' '}
+                          <span className="font-mono">{detection.masked_value}</span>
+                        </p>
+                      ))}
+                    </div>
+                  )}
                   {msg.layer && (
                     <p className="text-xs mt-2 opacity-75">
                       Blocked by: {msg.layer === 'llama_guard' ? 'Llama Guard' : 'Guardrails'}
@@ -319,6 +398,7 @@ export default function AIChat() {
               </div>
             ))}
             <div ref={messagesEndRef} />
+            </div>
           </div>
         </div>
 
@@ -347,9 +427,17 @@ export default function AIChat() {
                 Send
               </button>
             </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-              Press Enter to send, Shift+Enter for new line
-            </p>
+            <div className="flex items-center justify-between mt-2">
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Press Enter to send, Shift+Enter for new line
+              </p>
+              <button
+                onClick={insertDemoExample}
+                className="text-xs px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-lg hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-colors"
+              >
+                🧪 Try PII Example
+              </button>
+            </div>
           </div>
         </div>
       </div>

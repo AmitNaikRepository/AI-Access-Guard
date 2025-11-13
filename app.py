@@ -21,6 +21,7 @@ import asyncio
 # Import our security modules
 from llama_guard import llama_guard_check, initialize_llama_guard
 from nemoguardrails import RailsConfig, LLMRails
+from pii_firewall import detect_and_mask_pii, format_detection_message
 
 # Load environment variables
 load_dotenv()
@@ -97,6 +98,8 @@ metrics_data = {
     "queries_by_role": {"employee": 0, "manager": 0, "founder": 0},
     "blocked_by_llama_guard": 0,
     "blocked_by_guardrails": 0,
+    "pii_detections": 0,
+    "pii_items_masked": 0,
     "queries_today": [],
     "hourly_data": {},
     "monthly_data": {}
@@ -453,6 +456,32 @@ async def websocket_chat(websocket: WebSocket):
                 continue
 
             logger.info(f"Received message from {username}: {user_message[:50]}...")
+
+            # Layer 0: PII Detection and Masking
+            original_message = user_message
+            pii_detections = []
+            try:
+                _, masked_message, pii_detections = detect_and_mask_pii(user_message)
+
+                if pii_detections:
+                    logger.info(f"PII detected: {len(pii_detections)} items masked for {username}")
+                    # Update PII metrics
+                    metrics_data["pii_detections"] += 1
+                    metrics_data["pii_items_masked"] += len(pii_detections)
+
+                    # Use masked message for further processing
+                    user_message = masked_message
+
+                    # Send PII detection notification to user
+                    await websocket.send_json({
+                        "type": "pii_detected",
+                        "message": f"🛡️ {len(pii_detections)} PII items detected and protected",
+                        "detections": pii_detections,
+                        "summary": format_detection_message(pii_detections)
+                    })
+            except Exception as e:
+                logger.error(f"PII detection error: {e}")
+                # Continue with original message if PII detection fails
 
             # Layer 1: Llama Guard Check
             try:
